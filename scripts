@@ -84,3 +84,6 @@ Summary of Performance Trends:
 """
 
 print(summary)
+
+# processed data
+df.to_csv('processed_vessel_data.csv', index=False)

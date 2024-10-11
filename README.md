@@ -4,7 +4,7 @@ This project focuses on analyzing the performance trends of two cruise ships, **
 
 ## Project Structure
 
-- **data/**: Contains raw and processed datasets for both vessels.
+- **processe_vessel_data/**: Contains raw and processed datasets for both vessels.
 - **notebooks/**: Jupyter notebooks for data exploration, analysis, and visualization.
 - **scripts/**: Python scripts used for data processing and model building.
 - **results/**: Outputs, charts, and final KPIs.
@@ -55,7 +55,6 @@ The data used in this project includes:
 The results will include:
 - **KPI trends**: Graphs showing power consumption, fuel flow rates, propulsion power, and other KPIs.
 - **Efficiency Analysis**: Insights into how the vessels' performance can be optimized.
-- **Recommendations**: Suggestions for improvements based on the analysis.
 
 ## Contributing
 
