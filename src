@@ -1,0 +1,86 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+from datetime import datetime
+
+pd.set_option('display.max_columns', None)
+
+# dataset into a DataFrame
+file_path = 'C:\\Users\\nirma\\repo\\data.csv'  
+df = pd.read_csv(file_path)
+
+# datetime format
+df['Start Time'] = pd.to_datetime(df['Start Time'])
+df['End Time'] = pd.to_datetime(df['End Time'])
+
+print(df.head())
+# total propulsion power (Port + Starboard)
+df['Total Propulsion Power'] = df['Port Side Propulsion Power (MW)'] + df['Starboard Side Propulsion Power (MW)']
+
+# total HVAC Chiller Power
+df['Total HVAC Chiller Power'] = df['HVAC Chiller 1 Power (MW)'] + df['HVAC Chiller 2 Power (MW)'] + df['HVAC Chiller 3 Power (MW)']
+
+# total Diesel Generator Power
+df['Total Diesel Generator Power'] = df['Diesel Generator 1 Power (MW)'] + df['Diesel Generator 2 Power (MW)'] + df['Diesel Generator 3 Power (MW)'] + df['Diesel Generator 4 Power (MW)']
+
+# fuel efficiency (Power/Fuel Flow)
+df['Fuel Efficiency'] = df['Total Propulsion Power'] / (df['Main Engine 1 Fuel Flow Rate (kg/h)'] + df['Main Engine 2 Fuel Flow Rate (kg/h)'] + df['Main Engine 3 Fuel Flow Rate (kg/h)'] + df['Main Engine 4 Fuel Flow Rate (kg/h)'])
+
+print(df.head())
+# Handle missing values
+df = df.fillna(0)  
+print(df.isnull().sum())
+
+# Total Propulsion Power over time
+plt.figure(figsize=(10, 6))
+sns.lineplot(x='Start Time', y='Total Propulsion Power', data=df, label='Total Propulsion Power')
+plt.title('Total Propulsion Power over Time')
+plt.xticks(rotation=45)
+plt.ylabel('Power (MW)')
+plt.xlabel('Time')
+plt.legend()
+plt.show()
+
+# Fuel Efficiency over time
+plt.figure(figsize=(10, 6))
+sns.lineplot(x='Start Time', y='Fuel Efficiency', data=df, label='Fuel Efficiency')
+plt.title('Fuel Efficiency over Time')
+plt.xticks(rotation=45)
+plt.ylabel('Fuel Efficiency')
+plt.xlabel('Time')
+plt.legend()
+plt.show()
+
+# correlation analysis
+correlation_columns = ['Total Propulsion Power', 'Total Diesel Generator Power', 'Fuel Efficiency', 'Sea Temperature (Celsius)', 'Speed Over Ground (knots)', 'True Wind Speed (knots)']
+
+# correlation matrix
+correlation_matrix = df[correlation_columns].corr()
+
+# heatmap of the correlations
+plt.figure(figsize=(8, 6))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.title('Correlation Matrix of Performance Indicators')
+plt.show()
+
+# average KPIs by Vessel
+kpi_summary = df.groupby('Vessel Name').agg({
+    'Total Propulsion Power': 'mean',
+    'Fuel Efficiency': 'mean',
+    'Sea Temperature (Celsius)': 'mean',
+    'Total Diesel Generator Power': 'mean'
+})
+
+print(kpi_summary)
+
+# summary 
+summary = f"""
+Summary of Performance Trends:
+
+- Average Total Propulsion Power: {df['Total Propulsion Power'].mean()} MW
+- Average Fuel Efficiency: {df['Fuel Efficiency'].mean()}
+- Correlation between True Wind Speed and Total Propulsion Power: {df['True Wind Speed (knots)'].corr(df['Total Propulsion Power'])}
+"""
+
+print(summary)
