@@ -49,7 +49,7 @@ This project focuses on analyzing the performance trends of two cruise ships, **
 The data used in this project includes:
 - **Vessel 1**: Performance data over a specific period, including power usage, fuel flow, wind conditions, etc.
 - **Vessel 2**: Performance data over a similar time frame, allowing for comparative analysis.
-
+   (nb: Dataset can be found in the projects and make sure to change the source in the script)
 ## Results
 
 The results will include:
